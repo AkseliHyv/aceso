@@ -1,112 +1,92 @@
 # Aceso
 
-A MicroPython firmware for heart rate measurement device written in MicroPython. Aceso is a heart rate variability (HRV) measurement device that utilizes photoplethysmography (PPG). The device is built around a Raspberry Pi Pico W microcontroller paired with a Crowtail Pulse Sensor v2.0 for PPG signal detection, an SSD1306 OLED display for the user interface, and a rotary encoder as well as some buttons for navigation.
+MicroPython firmware for a heart rate variability (HRV) measurement device that uses photoplethysmography (PPG). The device reads the PPG signal through a pulse sensor and shows the results on an OLED display, with a rotary encoder and buttons for navigation.
+
+## Team
+
+- [AkseliHyv](https://github.com/AkseliHyv)
+- [ptchtrns](https://github.com/ptchtrns)
+- [MiroVart](https://github.com/mirovart)
+
+The same repository can be found on ptchtrns' GitHub. This project is pulled from GitLab.
+
+## Hardware
+
+| Component | Part |
+|---|---|
+| Microcontroller | Raspberry Pi Pico W |
+| Pulse sensor | Crowtail Pulse Sensor v2.0 |
+| Display | SSD1306 OLED |
+| Input | Rotary encoder and push buttons |
 
 ## Prerequisites
 
-Install [mpremote](https://docs.micropython.org/en/latest/reference/mpremote.html) on your system:
+- A Raspberry Pi Pico W with MicroPython installed, connected over USB
+- No other program, such as Thonny, connected to the board
+- [mpremote](https://docs.micropython.org/en/latest/reference/mpremote.html) installed:
 
 ```bash
 pip install mpremote
 ```
 
-Connect your board via USB before running any commands.
+## Configure
 
-## Installation
+Set the following in `config.py`:
 
-1. Make sure mpremote installed (look at Prerequistisites).
-2. Make sure that your Raspberry Pi is:
-   - Connected to your machine
-   - Has MicroPython installed
-   - Is not used by some other programs
-3. Run install.sh for linux/macos or install.ps1 for Windows.
+| Field | Purpose |
+|---|---|
+| Device name | The name the device uses. |
+| SSID | The Wi-Fi network to connect to. |
+| Password | The Wi-Fi network's password. |
 
-## Usage
+The Pico W only supports 2.4 GHz networks, so the device cannot connect to a 5 GHz network.
 
-- You can edit device's name, network's SSID and password in `config.py`.
-- Device only works on 2.4 GHz network.
+## Install
 
-## Syncing files
+Run the install script from the repository root:
 
-Two sync utility scripts are provided — one for Linux/macOS and one for Windows.
+```bash
+./install.sh      # Linux/macOS
+```
 
-### Linux / macOS
+```powershell
+.\install.ps1     # Windows
+```
 
-Make the script executable once:
+## Sync files with the board
+
+The repository includes sync scripts for Linux/macOS (`mpremote-sync.sh`) and Windows (`mpremote-sync.ps1`).
+On Linux/macOS, make the script executable once:
 
 ```bash
 chmod +x mpremote-sync.sh
 ```
 
-**Push** local files to the board:
+| Action | Linux/macOS | Windows |
+|---|---|---|
+| Push local files to the board | `./mpremote-sync.sh push` | `.\mpremote-sync.ps1 push` |
+| Wipe the board, then push | `./mpremote-sync.sh push --clean` | `.\mpremote-sync.ps1 push -Clean` |
+| Pull all files from the board into the current folder | `./mpremote-sync.sh pull` | `.\mpremote-sync.ps1 pull` |
 
-```bash
-./mpremote-sync.sh push
-```
+> **Warning:** `--clean` and `-Clean` permanently delete everything on the board's filesystem before pushing. Files on the board that do not exist locally are lost.
 
-**Push with a clean slate** — wipes the remote filesystem first, then pushes:
-
-```bash
-./mpremote-sync.sh push --clean
-```
-
-> ⚠️ **Warning:** This permanently deletes everything on the board's filesystem before pushing. Any files on the board that don't exist locally will be lost.
-
-**Pull** all files from the board back to your current directory:
-
-```bash
-./mpremote-sync.sh pull
-```
-
-**Specify a port** if the board isn't auto-detected:
+If the board is not detected automatically, pass its port:
 
 ```bash
 ./mpremote-sync.sh push --port /dev/ttyUSB0
 ./mpremote-sync.sh push --clean --port /dev/cu.usbmodem1101
 ```
 
-### Windows (PowerShell)
-
-**Push** local files to the board:
-
-```powershell
-.\mpremote-sync.ps1 push
-```
-
-**Push with a clean slate** — wipes the remote filesystem first, then pushes:
-
-```powershell
-.\mpremote-sync.ps1 push -Clean
-```
-
-> ⚠️ **Warning:** This permanently deletes everything on the board's filesystem before pushing. Any files on the board that don't exist locally will be lost.
-
-**Pull** all files from the board back to your current directory:
-
-```powershell
-.\mpremote-sync.ps1 pull
-```
-
-**Specify a port** if the board isn't auto-detected:
-
 ```powershell
 .\mpremote-sync.ps1 push -Port COM3
 .\mpremote-sync.ps1 push -Clean -Port COM3
 ```
 
-## Typical workflow with Thonny IDE
+## Develop with Thonny
 
-1. Clone this repository on your development machine.
-2. Push the files to the board:
-   ```bash
-   ./mpremote-sync.sh push        # Linux/macOS
-   .\mpremote-sync.ps1 push       # Windows
-   ```
-3. Edit code in Thonny.
-4. Once changes are ready, push back to the main machine:
-   ```bash
-   ./mpremote-sync.sh pull        # Linux/macOS
-   .\mpremote-sync.ps1 pull       # Windows
-   ```
+1. Clone the repository on your development machine.
+2. Push the files to the board with `./mpremote-sync.sh push` or `.\mpremote-sync.ps1 push`.
+3. Edit the code on the board in Thonny.
+4. Pull the changes back to your machine with `./mpremote-sync.sh pull` or `.\mpremote-sync.ps1 pull`.
 
-> **Tip:** Use `--clean` / `-Clean` when you want to ensure the board's filesystem exactly mirrors your local copy, removing any files on the board that no longer exist locally.
+Use `--clean` or `-Clean` when pushing to make the board's filesystem match your local copy exactly.
