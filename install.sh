@@ -1,0 +1,1 @@
+./mpremote-sync.sh push --clean
