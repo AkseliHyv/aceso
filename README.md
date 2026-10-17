@@ -2,10 +2,7 @@
 
 MicroPython firmware for a heart rate variability (HRV) measurement device that uses photoplethysmography (PPG). The device reads the PPG signal through a pulse sensor and shows the results on an OLED display, with a rotary encoder and buttons for navigation.
 
-| | | |
-|---|---|---|
-| ![Main menu](docs/assets/main-menu.png) | ![Measuring](docs/assets/measuring.png) | ![Results](docs/assets/results.png) |
-| ![Kubios results](docs/assets/kubios-results.png) | ![Patients](docs/assets/patients.png) | |
+![A measurement and Kubios analysis on the Aceso display](docs/assets/aceso.gif)
 
 ## Features
 
