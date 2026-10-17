@@ -1,6 +1,18 @@
-# Aceso
+# <img src="docs/assets/aceso.png" alt="Aceso" width="360">
 
 MicroPython firmware for a heart rate variability (HRV) measurement device that uses photoplethysmography (PPG). The device reads the PPG signal through a pulse sensor and shows the results on an OLED display, with a rotary encoder and buttons for navigation.
+
+| | | |
+|---|---|---|
+| ![Main menu](docs/assets/main-menu.png) | ![Measuring](docs/assets/measuring.png) | ![Results](docs/assets/results.png) |
+| ![Kubios results](docs/assets/kubios-results.png) | ![Patients](docs/assets/patients.png) | |
+
+## Features
+
+- Live heart rate with the PPG waveform drawn on the display
+- HRV analysis on the device: mean PPI, RMSSD and SDNN
+- Sends measurements to Kubios over MQTT for SNS, PNS and stress index
+- Saves results to a history, with separate patient profiles
 
 ## Team
 
@@ -31,13 +43,15 @@ pip install mpremote
 
 ## Configure
 
-Set the following in `config.py`:
+Set the following in `app/config.py`:
 
 | Field | Purpose |
 |---|---|
-| Device name | The name the device uses. |
-| SSID | The Wi-Fi network to connect to. |
-| Password | The Wi-Fi network's password. |
+| `DEVICE_NAME` | The name the device uses. |
+| `SSID` | The Wi-Fi network to connect to. |
+| `PASSWORD` | The Wi-Fi network's password. |
+| `BROKER_IP` | The IP address of the MQTT broker used for Kubios analysis. |
+| `BROKER_PORT` | The MQTT broker's port. |
 
 The Pico W only supports 2.4 GHz networks, so the device cannot connect to a 5 GHz network.
 
@@ -50,8 +64,10 @@ Run the install script from the repository root:
 ```
 
 ```powershell
-.\install.ps1     # Windows
+.\install.cmd     # Windows
 ```
+
+Both scripts run a clean push, which wipes the board's filesystem before copying the files.
 
 ## Sync files with the board
 
@@ -66,7 +82,7 @@ chmod +x mpremote-sync.sh
 |---|---|---|
 | Push local files to the board | `./mpremote-sync.sh push` | `.\mpremote-sync.ps1 push` |
 | Wipe the board, then push | `./mpremote-sync.sh push --clean` | `.\mpremote-sync.ps1 push -Clean` |
-| Pull all files from the board into the current folder | `./mpremote-sync.sh pull` | `.\mpremote-sync.ps1 pull` |
+| Pull all files from the board into `app/` | `./mpremote-sync.sh pull` | `.\mpremote-sync.ps1 pull` |
 
 > **Warning:** `--clean` and `-Clean` permanently delete everything on the board's filesystem before pushing. Files on the board that do not exist locally are lost.
 
